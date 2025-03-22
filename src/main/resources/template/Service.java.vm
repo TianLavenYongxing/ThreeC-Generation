@@ -1,0 +1,19 @@
+package ${package}.service;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ${main}.mybatis.service.BaseService;
+import ${package}.dto.${className}DTO;
+import ${package}.entity.${className}Entity;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * ${comments}
+ *
+ * @author ${author} ${email}
+ * @since ${version} ${date}
+ */
+public interface ${className}Service extends BaseService<${className}Entity> {
+
+}

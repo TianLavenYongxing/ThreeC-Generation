@@ -1,0 +1,103 @@
+package ${package}.controller;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ${package}.dto.${className}DTO;
+import ${package}.entity.${className}Entity;
+import ${package}.excel.${className}Excel;
+import ${package}.service.${className}Service;
+import ${main}.mybatis.constant.Constant;
+import ${main}.mybatis.utils.ConvertUtils;
+import ${main}.mybatis.utils.R;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
+import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
+import java.util.Arrays;
+
+
+/**
+ * ${comments}
+ *
+ * @author ${author} ${email}
+ * @since ${version} ${date}
+ */
+@RestController
+@RequestMapping("${moduleName}/${pathName}")
+@Api(tags="${comments}")
+public class ${className}Controller {
+
+    private  ${className}Service ${classname}Service;
+
+    @Autowired
+    public void setRepository(${className}Service ${classname}Service) {
+        this.${classname}Service = ${classname}Service;
+    }
+
+    @GetMapping("page")
+    @ApiOperation("分页")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = Constant.PAGE, value = "当前页码，从1开始", paramType = "query", required = true, dataType="int") ,
+        @ApiImplicitParam(name = Constant.LIMIT, value = "每页显示记录数", paramType = "query",required = true, dataType="int") ,
+        @ApiImplicitParam(name = Constant.ORDER_FIELD, value = "排序字段", paramType = "query", dataType="String") ,
+        @ApiImplicitParam(name = Constant.ORDER, value = "排序方式，可选值(asc、desc)", paramType = "query", dataType="String")
+    })
+    public R<Object> page(@ApiIgnore @RequestParam Map<String, Object> params){
+
+        Page<${className}Entity> page = ${classname}Service.page(params);
+
+        return R.ok(ConvertUtils.convertPage(page, ${className}DTO.class));
+    }
+
+    @GetMapping("{id}")
+    @ApiOperation("信息")
+    public R<${className}DTO> get(@PathVariable("id") String id){
+        ${className}Entity entity = ${classname}Service.getById(id);
+        ${className}DTO data = ConvertUtils.sourceToTarget(entity,${className}DTO.class);
+        return R.ok(data);
+    }
+
+    @PostMapping
+    @ApiOperation("保存")
+    public R<Object> save(@RequestBody ${className}DTO dto){
+
+        ${className}Entity entity = ConvertUtils.sourceToTarget(dto,${className}Entity.class);
+        ${classname}Service.save(entity);
+
+        return R.ok();
+    }
+
+    @PutMapping
+    @ApiOperation("修改")
+    public R<Object>  update(@RequestBody ${className}DTO dto){
+
+        ${className}Entity entity = ConvertUtils.sourceToTarget(dto,${className}Entity.class);
+        ${classname}Service.updateById(entity);
+
+        return R.ok();
+    }
+
+    @DeleteMapping
+    @ApiOperation("删除")
+    public R<Object> delete(@RequestBody String[] ids){
+
+        ${classname}Service.removeByIds(Arrays.asList(ids));
+
+        return R.ok();
+    }
+
+    @GetMapping("export")
+    @ApiOperation("导出")
+    public void export(@ApiIgnore @RequestParam Map<String, Object> params, HttpServletResponse response) throws Exception {
+//       List<${className}DTO> list = ${classname}Service.list(params);
+
+//        ExcelUtils.exportExcelToTarget(response, null, list, ${className}Excel.class);
+    }
+
+}

@@ -1,0 +1,38 @@
+package ${package}.entity;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+import ${main}.mybatis.entity.BaseEntity;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
+import lombok.EqualsAndHashCode;
+
+#if(${hasBigDecimal})
+import java.math.BigDecimal;
+#end
+import java.util.Date;
+
+/**
+ * ${comments}
+ *
+ * @author ${author} ${email}
+ * @since ${version} ${date}
+ */
+@Data
+@Accessors(chain = true)
+@EqualsAndHashCode(callSuper=false)
+@TableName("${tableName}")
+public class ${className}Entity extends BaseEntity {
+
+#foreach ($column in $columns)
+#if($column.attrname != 'createBy' && $column.attrname != 'createAt'
+	&& $column.attrname != 'updateBy' && $column.attrname != 'updateAt'
+	&& $column.attrname != 'deleteBy' && $column.attrname != 'deleteAt'
+	&& $column.attrname != 'id' && $column.attrname != 'delFlag')
+    /**
+     * $column.comments
+     */
+	private $column.attrType $column.attrname;
+#end
+#end
+}
